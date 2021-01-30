@@ -3,7 +3,9 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { login } from "../../api/auth";
+import { setCookie } from "../../helper/Cookie";
 
 const useStyle = makeStyles((theme) => ({
   signConatiner: {
@@ -18,21 +20,36 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const emailInputField = (event) => {
-    setEmail(event.target.value);
+  const handleInputFieldChange = (event) => {
+    const { name, value } = event.target;
+    if (name === "email") {
+      setEmail(value);
+    }
+    if (name === "password") {
+      setPassword(value);
+    }
   };
 
-  const passwordInputField = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const onSubmitForm = (event) => {
+  const onSubmitForm = async (event) => {
     event.preventDefault();
+    try {
+      const data = await login({ email: email, password: password });
 
-    console.log(email, password);
+      if (data.success) {
+        setCookie("token", data.token);
+        setCookie("user", JSON.stringify(data.user));
+      } else {
+        alert(data.msg);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const classes = useStyle();
+
+  useEffect(() => {}, []);
+
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.signConatiner}>
@@ -50,7 +67,7 @@ export default function Login() {
             autoComplete="eamil"
             required
             value={email}
-            onChange={emailInputField}
+            onChange={handleInputFieldChange}
           />
 
           <TextField
@@ -62,7 +79,7 @@ export default function Login() {
             name="password"
             fullWidth
             value={password}
-            onChange={passwordInputField}
+            onChange={handleInputFieldChange}
             required
           />
           <Button type="submit" fullWidth variant="contained" color="primary">
