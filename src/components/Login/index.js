@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect } from "react";
 import { login } from "../../api/auth";
 import { setCookie } from "../../helper/Cookie";
+import { withRouter } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
   signConatiner: {
@@ -16,7 +17,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -38,6 +39,7 @@ export default function Login() {
       if (data.success) {
         setCookie("token", data.token);
         setCookie("user", JSON.stringify(data.user));
+        props.history.push("/dashboard");
       } else {
         alert(data.msg);
       }
@@ -90,3 +92,5 @@ export default function Login() {
     </Container>
   );
 }
+
+export default withRouter(Login);

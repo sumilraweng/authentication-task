@@ -80,7 +80,6 @@ function Signup(props) {
           password: password,
           name: userName,
           phone: phone,
-          // otpResponse: "12345",
         });
       } catch (error) {
         console.log(error);
