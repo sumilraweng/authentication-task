@@ -20,6 +20,10 @@ const useStyle = makeStyles((theme) => ({
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  //check wether the cookies is there
+  // if it is there then it should redirect to dashboard
+  // else it should be logged in
+  useEffect(() => {}, []);
 
   const handleInputFieldChange = (event) => {
     const { name, value } = event.target;
@@ -35,10 +39,8 @@ function Login(props) {
     event.preventDefault();
     try {
       const data = await login({ email: email, password: password });
-
       if (data.success) {
         setCookie("token", data.token);
-        setCookie("user", JSON.stringify(data.user));
         props.history.push("/dashboard");
       } else {
         alert(data.msg);

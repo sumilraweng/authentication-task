@@ -10,6 +10,10 @@ export default function Router(props) {
         <Route path="/" exact component={LoginPage}></Route>
         <Route path="/signup" component={SignupPage}></Route>
         <Route path="/dashboard" component={DashboardPage}></Route>
+        <Route>
+          {" "}
+          <div>Page Not found</div>{" "}
+        </Route>
       </Switch>
     </BrowserRouter>
   );
